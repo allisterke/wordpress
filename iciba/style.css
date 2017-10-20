@@ -1,0 +1,17 @@
+#container {
+    display: flex;
+}
+
+#title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: "Courier New";
+    padding-bottom: 1em;
+    border-bottom: 1px solid;
+    margin-bottom: 1em;
+}
+
+#list {
+    font-family: "Courier New";
+}
