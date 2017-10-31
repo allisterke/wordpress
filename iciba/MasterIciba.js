@@ -149,6 +149,18 @@ class MasterIciba {
         return {sentences, trans, mp3s};
     }
 
+    https(src) {
+        if(src.startsWith('https://')) {
+            return src;
+        }
+        else if(src.startsWith('http://')) {
+            return src.replace('http://', 'https://');
+        }
+        else {
+            return 'https://' + src;
+        }
+    }
+
     render(sm) {
         let sentences = sm.sentences;
         let trans = sm.trans;
@@ -173,7 +185,7 @@ class MasterIciba {
             text.style.marginLeft = '2em';
 
             let audio = document.createElement('audio');
-            audio.src = mp3s[i];
+            audio.src = this.https(mp3s[i]);
             audio.controls = true;
             audio.style.display = 'inline';
             audio.style.marginTop = 'auto';
@@ -265,7 +277,10 @@ class MasterIciba {
 
     createPh(ph) {
         let audio = document.createElement('audio');
-        audio.src = ph;
+        audio.src = this.https(ph);
+        audio.controls = true;
+        audio.style.paddingTop = '1em';
+        document.getElementById('title').appendChild(audio);
         return audio;
     }
 
