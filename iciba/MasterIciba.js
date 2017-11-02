@@ -150,15 +150,7 @@ class MasterIciba {
     }
 
     https(src) {
-        if(src.startsWith('https://')) {
-            return src;
-        }
-        else if(src.startsWith('http://')) {
-            return src.replace('http://', 'https://');
-        }
-        else {
-            return 'https://' + src;
-        }
+        return '//' + src.replace(/https?:\/\//, '')
     }
 
     render(sm) {
