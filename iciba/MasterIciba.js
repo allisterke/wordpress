@@ -145,6 +145,15 @@ class MasterIciba {
                     }
                 }
             }
+            if ('sentence' in json) {
+                let s = json.sentence;
+                for (let i = 0; i < s.length; ++ i) {
+                    let ex = s[i];
+                    sentences.push(ex.Network_en);
+                    trans.push(ex.Network_cn);
+                    mp3s.push(ex.tts_mp3);
+                }
+            } 
         } catch (e) { console.log(e); }
         return {sentences, trans, mp3s};
     }
