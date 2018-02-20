@@ -4,6 +4,45 @@ function delay(t) {
     })
 }
 
+function Array2d(n1, n2) {
+    let dp = [];
+    for(let i = 0; i < n1; ++ i) {
+        let row = [];
+        for(let j = 0; j < n2; ++ j) {
+            row.push(0);
+        }
+        dp.push(row);
+    }
+    return dp;
+}
+
+function contains(a, s) {
+    for(let i = 0; i < a.length; ++ i) {
+        if(editDistance(a[i], s) < 5) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function editDistance(a, b) {
+    let dp = Array2d(a.length+1, b.length+1);
+    for(let i = 0; i <= a.length; ++ i) {
+        for(let j = 0; j <= b.length; ++ j) {
+            if(i == 0 || j == 0) {
+                dp[i][j] = Math.max(i, j);
+            }
+            else if(a[i-1].toLowerCase() == b[j-1].toLowerCase()) {
+                dp[i][j] = dp[i-1][j-1];
+            }
+            else {
+                dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1;
+            }
+        }
+    }
+    return dp[a.length][b.length];
+}
+
 class JsonCache {
     constructor(words) {
         this.queryUrl = 'index.php?a=getWordMean&c=search&list=1%2C2%2C3%2C4%2C5%2C8%2C9%2C10%2C12%2C13%2C14%2C15%2C18%2C21%2C22%2C24%2C3003%2C3004%2C3005&word=';
@@ -50,7 +89,7 @@ class MasterIciba {
     constructor(text) {
         this.words = text.split(/[\r\n]+/);
         // this.words = this.words.slice(0, this.words.length - 1).sort();
-        this.words = this.shuffle(this.words.slice(0, this.words.length - 1)).slice(0, 100).sort();
+        this.words = this.shuffle(this.words.slice(0, this.words.length - 1)).slice(0, 25).sort();
         this.jsonCache = new JsonCache(this.words);
 
         this.updateList(0);
@@ -137,6 +176,9 @@ class MasterIciba {
                         let examples = entry[j].example;
                         for (let k = 0; k < examples.length; ++k) {
                             let ex = examples[k];
+                            if(contains(sentences, ex.ex)) {
+                                continue;
+                            }
                             sentences.push(ex.ex);
                             trans.push(ex.tran);
                             mp3s.push(ex.tts_mp3);
@@ -149,6 +191,9 @@ class MasterIciba {
                 let s = json.sentence;
                 for (let i = 0; i < s.length; ++ i) {
                     let ex = s[i];
+                    if(contains(sentences, ex.Network_en)) {
+                        continue;
+                    }
                     sentences.push(ex.Network_en);
                     trans.push(ex.Network_cn);
                     mp3s.push(ex.tts_mp3);
